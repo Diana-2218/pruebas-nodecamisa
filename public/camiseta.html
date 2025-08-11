@@ -222,7 +222,7 @@ function generarMiniatura(c){
     <path d="M 9 5 L 7 3 L 5 3 L 5 6 L 5 12 L 13 12 L 13 6 L 13 3 L 11 3" fill="${c.torsoColor}"/>
     <path d="M 13 6 L 13 3 L 17 5 L 15 7" fill="${c.mangaDerColor}" />
     <path d="M 8 2 L 7 3 L 9 5 L 8 3" fill="${c.cuelloIzqColor}" />
-    <path d="M 10 2 L 11 3 L 9 5 L 10 3 M 1 4" fill="${cuelloDerColor}" />
+    <path d="M 10 2 L 11 3 L 9 5 L 10 3 M 1 4" fill="${c.cuelloDerColor}" />
     </svg`;
 }
 
@@ -235,7 +235,7 @@ async function cargarTabla(){
   const tabla = $('#tabla-camisetas').DataTable();
   tabla.clear(); //Limpia la tabla antes de llenarla
 
-  camiseta.forEach(c => {
+  camisetas.forEach(c => {
     //Extrae el nombre del creador si existe 
     let creador = 'Desconocido';
     if (c.creador && typeof c.creador === 'object'){

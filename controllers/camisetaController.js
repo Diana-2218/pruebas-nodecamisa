@@ -1,6 +1,6 @@
 const Camiseta = require('../models/camiseta');
 const bcrypt = require('bcryptjs');
-
+const Usuario = require('../models/Usuario');
 
 exports.getCamisetas = async (req, res) => {
   try {
@@ -25,7 +25,7 @@ exports.getCamisetas = async (req, res) => {
   })
 );
 
-    res.json(camisetas);
+    res.json(camisetasConUsuario);
   } catch (error) {
     res.status(500).json({ error: 'Error del servidor' });
   }
