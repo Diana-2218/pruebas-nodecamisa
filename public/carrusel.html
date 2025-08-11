@@ -7,68 +7,152 @@
   <title>Carrusel de Camisetas</title>
   <!-- Enlace al archivo CSS externo -->
 <style>
-/* Contenedor del carrusel */
-.carousel {
-  display: flex;
-  flex-direction: row;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;   /* Scroll horizontal con encaje obligatorio */
-  scroll-behavior: smooth;        /* Desplazamiento suave */
-  -webkit-overflow-scrolling: touch; /* Suaviza scroll en iOS */
-}
-/* Ocultar la barra de scroll (opcional) */
-.carousel::-webkit-scrollbar {
-  display: none;
-}
-.carousel {
-  scrollbar-width: none;        /* Firefox */
-  -ms-overflow-style: none;     /* IE/Edge legacy */
+   /* Fondo de la página */
+   
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(to right, #d0a2f7, #a0c4ff);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 2rem 0;
 }
 
-/* Tarjetas del carrusel */
-.card {
-  flex-shrink: 0;        /* Evita que la tarjeta se encoja más allá de su contenido */
-  flex-basis: 200px;     /* Ancho base de cada tarjeta (puedes ajustarlo) */
-  scroll-snap-align: start;  /* Encaja al inicio del contenedor al hacer scroll */
-  margin-right: 1rem;    /* Separación entre tarjetas */
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 1rem;
-  background: #fafafa;
+/* Estilo mejorado para el título */
+.titulo-carrusel {
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin: 2rem 0 2.5rem;
+  text-align: center;
+  color: #4a3f61;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
 }
-/* Opcional: última tarjeta sin margen derecho extra */
+
+/* Contenedor del carrusel centrado */
+.carousel {
+display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  justify-content: flex-start; /* Asegura que las tarjetas empiecen a la izquierda */
+  padding: 0 2rem 1rem 2rem;  /* ¡Agrega padding a la izquierda y derecha! */
+  max-width: 90vw;
+  margin: 0 auto;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Barra de scroll visible y estilizada */
+.carousel::-webkit-scrollbar {
+  height: 10px;
+}
+
+.carousel::-webkit-scrollbar-track {
+  background: #e0ccff;
+  border-radius: 5px;
+}
+
+.carousel::-webkit-scrollbar-thumb {
+  background: #b46fe2;
+  border-radius: 5px;
+}
+
+.carousel::-webkit-scrollbar-thumb:hover {
+  background: #a359d1;
+}
+
+.carousel {
+  scrollbar-width: thin;
+  scrollbar-color: #b46fe2 #e0ccff;
+}
+
+/* Tarjetas más separadas */
+.card {
+  flex-shrink: 0;
+  flex-basis: 240px;
+  scroll-snap-align: start;
+  margin: 0 1.25rem;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 1.5rem;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+.card:first-child {
+  margin-left: 1.25rem;
+}
+
 .card:last-child {
-  margin-right: 0;
+  margin-right: 1.25rem;
 }
 
 /* Estilos internos de la tarjeta */
-.shirt-preview {
-  margin-bottom: 0.5rem;
-}
-.creator-name {
+.nombre-creador {
   font-size: 1.1rem;
   margin: 0.5rem 0 0.25rem;
+  font-weight: 600;
+  color: #4a3f61;
 }
-.rating, .creation-date {
+
+.calificacion, .fecha {
   font-size: 0.9rem;
   margin: 0.25rem 0;
+  color: #666;
 }
-button.like-btn, button.dislike-btn {
+
+.botones-reaccion button {
   margin: 0.5rem 0.5rem 0 0;
-  padding: 0.4rem 0.8rem;
+  padding: 0.5rem 0.9rem;
   border: none;
-  border-radius: 3px;
+  border-radius: 6px;
   cursor: pointer;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
 }
-button.like-btn { background-color: #4caf50; color: #fff; }
-button.dislike-btn { background-color: #f44336; color: #fff; }
-button.like-btn:hover { background-color: #45a049; }
-button.dislike-btn:hover { background-color: #e53935; }
+
+.btn-like {
+  background-color: #6fcf97;
+  color: white;
+}
+
+.btn-like:hover {
+  background-color: #57b37f;
+}
+
+.btn-dislike {
+  background-color: #f88379;
+  color: white;
+}
+
+.btn-dislike:hover {
+  background-color: #e6675c;
+}
+
+.miniatura-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.miniatura {
+  width: 100%;
+  max-width: 160px;
+  height: auto;
+}
 
 </style>
 </head>
 <body>
-
+    <h2 class="titulo-carrusel">Descubre las propuestas</h2>
   <!-- Contenedor del carrusel -->
   <div class="carousel" id="carousel">
     <!-- Las tarjetas se insertarán aquí dinámicamente con JS -->
@@ -126,13 +210,15 @@ loadCamisetas();
 
 function generarMiniatura(c) {
 return `
+ <div class="miniatura-wrapper">
 <svg class="miniatura" viewBox="1 2 26 14">
 <path d="M 4 8 M 5 3 L 5 6 L 3 7 L 1 5" fill="${c.mangaIzqColor}" />
 <path d="M 9 5 L 7 3 L 5 3 L 5 6 L 5 12 L 13 12 L 13 6 L 13 3 L 11 3" fill="${c.torsoColor}" />
 <path d="M 13 6 L 13 3 L 17 5 L 15 7" fill="${c.mangaDerColor}" />
 <path d="M 8 2 L 7 3 L 9 5 L 8 3" fill="${c.cuelloIzqColor}" />
 <path d="M 10 2 L 11 3 L 9 5 L 10 3 M 1 4" fill="${c.cuelloDerColor}" />
-</svg>`;
+</svg>
+</div>`;
 }  
 
 // Función para enviar voto de calificación
