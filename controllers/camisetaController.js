@@ -69,6 +69,29 @@ exports.updateCamiseta = async (req, res) => {
   }
 };
 
+// Ejemplo de implementación en Node/Express (JavaScript del lado servidor)
+exports.calificarCamiseta= async (req, res) => {
+
+  const id = req.params.id;
+  const { calificacion } = req.body;  // calificacion será 1 o -1 según voto
+  try {
+    // Buscar la camiseta por ID en la base de datos
+    const camiseta = await Camiseta.findById(id);
+    if (!camiseta) {
+      return res.status(404).json({ error: 'Camiseta no encontrada' });
+    }
+    // Actualizar solo el campo calificacion sumando el valor recibido
+    camiseta.calificacion += calificacion;
+    await camiseta.save();  // guardar cambios en la BD
+    // Devolver la camiseta actualizada (opcionalmente podría devolver solo status)
+    return res.json(camiseta);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error de servidor' });
+  }
+};
+
+
 exports.deleteCamiseta = async (req, res) => {
   try {
     const camisetaEliminada = await Camiseta.findByIdAndDelete(req.params.id);
