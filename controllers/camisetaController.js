@@ -25,12 +25,46 @@ exports.getCamisetas = async (req, res) => {
   })
 );
 
+
+
     res.json(camisetasConUsuario);
   } catch (error) {
     res.status(500).json({ error: 'Error del servidor' });
   }
 };
 
+
+exports.getCamisetasOrderbycalificacion = async (req, res) => {
+  try {
+    const camisetas = await Camiseta.find().sort({calificacion:-1});
+    // Enriquecer cada camiseta con datos del usuario creador:
+    const camisetasConUsuario = await Promise.all(
+    camisetas.map(async (c) => {
+    try {
+      // Buscar al usuario por ID (c.creador) y seleccionar solo nombre y correo
+      const usuario = await Usuario.findById(c.creador).select('nombre correo');
+      return {
+        ...c.toObject(),        // Convertir el documento de Mongoose a objeto plano JS
+        creador: usuario || null // Reemplazar el campo 'creador' con los datos del usuario (o null si no se encontró)
+      };
+    } catch (error) {
+      // En caso de error al buscar usuario, devolvemos la camiseta con 'creador' null
+      return {
+        ...c.toObject(),
+        creador: null
+      };
+    }
+  })
+);
+
+
+
+    res.json(camisetasConUsuario);
+  } catch (error) {
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+};
+ 
 exports.getCamisetaById = async (req, res) => {
   try {
     const camiseta = await Camiseta.findById(req.params.id);

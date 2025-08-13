@@ -5,6 +5,7 @@ const { verificarToken } = require('../seguridad/auth');
 
 
 router.get('/', camisetaController.getCamisetas);
+router.get('/ordenadoporcalificacion', camisetaController.getCamisetasOrderbycalificacion);
 router.get('/:id',  verificarToken, camisetaController.getCamisetaById);
 router.post('/',  verificarToken, camisetaController.createCamiseta);
 router.put('/:id',  verificarToken, camisetaController.updateCamiseta);
