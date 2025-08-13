@@ -89,7 +89,8 @@
           <th>Miniatura</th>
           <th>Fecha creación</th>
           <th>Creador</th>
-          <th>Acciones</th>
+       
+          <th>Calificación</th>
         </tr>
       </thead>
       <tbody>
@@ -122,21 +123,21 @@
       const camisetas = await resp.json();
       const tabla = $('#tabla-camisetas').DataTable();
       tabla.clear();
-
+console.log(camisetas);
       camisetas.forEach(c => {
         let creador = 'Desconocido';
         if (c.creador && typeof c.creador === 'object') {
-          creador = c.creador._id || c.creador.nombre || c.creador.correo || 'Usuario';
+          creador =  c.creador.nombre || c.creador.correo || 'Usuario';
         } else if (typeof c.creador === 'string') {
           creador = c.creador;
         }
 
         tabla.row.add([
+           
           generarMiniatura(c),
           new Date(c.fechaCreacion).toLocaleString(),
           creador,
-          `<button onclick='editarCamiseta("${c._id}")'>Modificar</button>
-           <button onclick='eliminarCamiseta("${c._id}")'>Eliminar</button>`
+           c.calificacion
         ]);
       });
 
